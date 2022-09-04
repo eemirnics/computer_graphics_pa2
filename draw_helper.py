@@ -26,6 +26,6 @@ def draw_brick():
 def draw_brick_row(): 
     for i in range(16):
         glPushMatrix()
-        glTranslate(50 * i, 0, 0)
+        glTranslate(50 * i, 775, 0)
         draw_brick()
         glPopMatrix()

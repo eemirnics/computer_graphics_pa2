@@ -23,6 +23,7 @@ def init_game():
     pygame.display.set_mode((800, 800), DOUBLEBUF|OPENGL)  
     glClearColor(0.95, 0.85, 0.97, 1.0)
     clock.tick()
+    
 
 # TODO: Some kind of note about needing to make this recursive
 def update(): 
