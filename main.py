@@ -13,16 +13,20 @@ position = point(350, 350)
 motion = vector(50, -60)
 clock = None
 delta_time = 0
+bricks = []
 
 
 def init_game(): 
     global clock
+    global bricks
     clock = pygame.time.Clock()
 
     pygame.display.init() 
     pygame.display.set_mode((800, 800), DOUBLEBUF|OPENGL)  
     glClearColor(0.95, 0.85, 0.97, 1.0)
     clock.tick()
+
+    bricks = create_bricks()
     
 
 # TODO: Some kind of note about needing to make this recursive
@@ -30,10 +34,11 @@ def update():
     global position
     global motion
     global delta_time
+    global bricks
 
     delta_time = clock.tick() / 1000
 
-    # Reverse direction if the square reaches an edge
+    # Reverse direction if the ball reaches an edge
     if position.x <= 0 or position.x >= 700:
         motion.x = -motion.x
     if position.y <= 0 or position.y >= 700:
@@ -42,10 +47,15 @@ def update():
     # Update position
     position += motion * delta_time
 
+    for b in bricks: 
+        if b.check_collision(position):
+            bricks.remove(b)
+
 
 def display(): 
     global position
     global motion
+    global bricks
 
     # Initialize matrix
     glMatrixMode(GL_PROJECTION)
@@ -59,7 +69,7 @@ def display():
 
     glClear(GL_COLOR_BUFFER_BIT) 
 
-    draw_brick_row()
+    draw_bricks(bricks)
 
     glPushMatrix()
 
