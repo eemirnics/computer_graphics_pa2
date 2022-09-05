@@ -8,5 +8,5 @@ class paddle:
         self.height = 10
         self.length = 50
 
-    def update_paddle_pos(self, x):
-        self.pos.x += x
+    def set_pos(self, x):
+        self.pos.x = x - self.length/2
