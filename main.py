@@ -7,10 +7,12 @@ from OpenGL.GLU import *
 from vector import *
 from point import *
 from draw_helper import *
-
+from ball import *
 
 position = point(350, 350)
 motion = vector(50, -60)
+game_ball = ball(position, 15, motion)
+
 clock = None
 delta_time = 0
 bricks = []
@@ -30,22 +32,21 @@ def init_game():
     
 
 # TODO: Some kind of note about needing to make this recursive
-def update(): 
-    global position
-    global motion
+def update():
+    global game_ball
     global delta_time
     global bricks
 
     delta_time = clock.tick() / 1000
 
     # Reverse direction if the ball reaches an edge
-    if position.x <= 0 or position.x >= 700:
-        motion.x = -motion.x
-    if position.y <= 0 or position.y >= 700:
-        motion.y = -motion.y
+    if game_ball.pos.x <= game_ball.radius or game_ball.pos.x > 800 - game_ball.radius:
+        game_ball.motion.x = -game_ball.motion.x
+    if game_ball.pos.y <= game_ball.radius or game_ball.pos.y > 800 - game_ball.radius:
+        game_ball.motion.y = -game_ball.motion.y
 
     # Update position
-    position += motion * delta_time
+    game_ball.pos += game_ball.motion * (delta_time * 2.0)
 
     for b in bricks: 
         if b.check_collision(position):
@@ -53,9 +54,8 @@ def update():
 
 
 def display(): 
-    global position
-    global motion
     global bricks
+    global game_ball
 
     # Initialize matrix
     glMatrixMode(GL_PROJECTION)
@@ -74,9 +74,9 @@ def display():
     glPushMatrix()
 
     # Translate to position 
-    glTranslate(position.x, position.y, 0)
+    glTranslate(game_ball.pos.x, game_ball.pos.y, 0)
 
-    draw_ball()
+    draw_ball(game_ball)
     
     glPopMatrix()
 
@@ -84,10 +84,7 @@ def display():
     pygame.display.flip()
 
 
-def game_loop(): 
-    global position
-    global motion
-
+def game_loop():
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
             pygame.quit()
