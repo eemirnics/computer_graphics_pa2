@@ -3,28 +3,34 @@ from pygame.locals import *
 
 from OpenGL.GL import * 
 from OpenGL.GLU import *
+from paddle import *
 
 from vector import *
 from point import *
 from draw_helper import *
 from ball import *
 
+viewport = [800, 800]
+
 position = point(350, 350)
 motion = vector(50, -60)
 game_ball = ball(position, 15, motion)
+
+game_paddle = paddle(point(int(viewport[0]/2), 50))
+game_paddle.pos.x = game_paddle.pos.x - game_paddle.length/2
 
 clock = None
 delta_time = 0
 bricks = []
 
 
-def init_game(): 
+def init_game():
     global clock
     global bricks
     clock = pygame.time.Clock()
 
     pygame.display.init() 
-    pygame.display.set_mode((800, 800), DOUBLEBUF|OPENGL)  
+    pygame.display.set_mode((viewport[0], viewport[1]), DOUBLEBUF|OPENGL)  
     glClearColor(0.95, 0.85, 0.97, 1.0)
     clock.tick()
 
@@ -40,9 +46,9 @@ def update():
     delta_time = clock.tick() / 1000
 
     # Reverse direction if the ball reaches an edge
-    if game_ball.pos.x <= game_ball.radius or game_ball.pos.x > 800 - game_ball.radius:
+    if game_ball.pos.x <= game_ball.radius or game_ball.pos.x > viewport[0] - game_ball.radius:
         game_ball.motion.x = -game_ball.motion.x
-    if game_ball.pos.y <= game_ball.radius or game_ball.pos.y > 800 - game_ball.radius:
+    if game_ball.pos.y <= game_ball.radius or game_ball.pos.y > viewport[1] - game_ball.radius:
         game_ball.motion.y = -game_ball.motion.y
 
     # Update position
@@ -64,8 +70,8 @@ def display():
     glLoadIdentity()
 
     # Set up view port and viewing window
-    glViewport(0, 0, 800, 800)
-    gluOrtho2D(0, 800, 0, 800)
+    glViewport(0, 0, viewport[0], viewport[1])
+    gluOrtho2D(0, viewport[0], 0, viewport[1])
 
     glClear(GL_COLOR_BUFFER_BIT) 
 
@@ -80,9 +86,16 @@ def display():
     
     glPopMatrix()
 
+    glPushMatrix()
+    
+    # Translate
+    glTranslate(game_paddle.pos.x, game_paddle.pos.y, 0)
+    
+    draw_paddle(game_paddle)
+
+    glPopMatrix()
     # Signifies done drawing and screen can now display
     pygame.display.flip()
-
 
 def game_loop():
     for event in pygame.event.get():
@@ -93,6 +106,8 @@ def game_loop():
             if event.key == K_ESCAPE:
                 pygame.quit()
                 quit()
+        elif event.type == pygame.MOUSEMOTION:
+            paddle.update_paddle_pos(game_paddle, event.rel[0])
         
     update() 
     display() 
