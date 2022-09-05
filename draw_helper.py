@@ -19,6 +19,7 @@ def draw_ball(ball):
         glVertex2f(cosine,sine)
     glEnd()
 
+
 # Draw paddle
 def draw_paddle(paddle):
     glBegin(GL_QUADS)
@@ -28,6 +29,7 @@ def draw_paddle(paddle):
     glVertex2f(paddle.length, paddle.height)
     glVertex2f(0, paddle.height)
     glEnd()
+
 
 # Draw a single brick
 def draw_brick(b):

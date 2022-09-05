@@ -56,7 +56,7 @@ def update():
         game_ball.motion.x = -game_ball.motion.x
     if game_ball.pos.y <= game_ball.radius or game_ball.pos.y > viewport[1] - game_ball.radius:
         game_ball.motion.y = -game_ball.motion.y
-    # TODO: Add condition for when to lose
+    # TODO: Add condition lose condition
 
     # Update position
     game_ball.pos += game_ball.motion * (delta_time * 2.0)
@@ -94,33 +94,30 @@ def display():
         # img1 = font1.render('chalkduster.ttf', True, pygame.Color(0, 0, 0))
         # screen.blit(img1, (20, 20))
         # TODO: Figure out how to draw text
-
-        print("Click to restart")
+        pass
         if game_won:
             # Draw the message "You win!"
-            print("You win")
+            pass
         elif game_lost: 
             # Draw the message "You lose!"
-            print("You lose")
+            pass
     else: 
         # Draw game objects
         draw_bricks(bricks)
 
         glPushMatrix()
-        glTranslate(game_ball.pos.x, game_ball.pos.y, 0)
-        draw_ball(game_ball)
+        glTranslate(game_paddle.pos.x, game_paddle.pos.y, 0)
+        draw_paddle(game_paddle)
         glPopMatrix()
 
-    glPushMatrix()
-    
-    # Translate
-    glTranslate(game_paddle.pos.x, game_paddle.pos.y, 0)
-    
-    draw_paddle(game_paddle)
+        glPushMatrix()
+        glTranslate(game_ball.pos.x, game_ball.pos.y, 0)
+        draw_ball(game_ball)
+        glPopMatrix()    
 
-    glPopMatrix()
     # Signifies done drawing and screen can now display
     pygame.display.flip()
+
 
 def game_loop():
     for event in pygame.event.get():
