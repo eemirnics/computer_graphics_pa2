@@ -16,6 +16,7 @@ class paddle:
         x_boundaries = [self.pos.x - self.length/2 , self.pos.x + self.length/2]
         y = self.pos.y
 
-        if ball.pos.y - ball.radius <= y and ball.pos.x >= x_boundaries[0] and ball.pos.y <= x_boundaries[1]:
-            return True
+        if ball.pos.y - ball.radius <= y:
+            if x_boundaries[0] <= ball.pos.x >= x_boundaries[1]:
+                return True
         return False

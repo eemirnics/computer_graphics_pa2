@@ -8,9 +8,9 @@ class ball:
         self.collision = False
 
     def check_change_dir(self, viewport):
-        if self.pos.x <= self.radius or self.pos.x > viewport[0] - self.radius:
+        if self.pos.x <= self.radius or self.pos.x >= viewport[0] - self.radius:
             self.change_x_dir()
-        if self.pos.y <= self.radius or self.pos.y > viewport[1] - self.radius:
+        if self.pos.y <= self.radius or self.pos.y >= viewport[1] - self.radius:
             self.change_y_dir()
     
     def change_y_dir(self):
