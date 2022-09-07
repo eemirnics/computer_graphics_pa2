@@ -52,14 +52,11 @@ def update():
     delta_time = clock.tick() / 1000
 
     # Reverse direction if the ball reaches an edge
-    if game_ball.pos.x <= game_ball.radius or game_ball.pos.x > viewport[0] - game_ball.radius:
-        game_ball.motion.x = -game_ball.motion.x
-    if game_ball.pos.y <= game_ball.radius or game_ball.pos.y > viewport[1] - game_ball.radius:
-        game_ball.motion.y = -game_ball.motion.y
+    game_ball.check_change_dir(viewport)
     # TODO: Add condition lose condition
 
     # Update position
-    game_ball.pos += game_ball.motion * (delta_time * 2.0)
+    game_ball.pos += game_ball.motion * (delta_time * 3.0)
 
     # Check for collision with bricks
     for b in bricks: 
@@ -68,6 +65,9 @@ def update():
             if len(bricks) == 0: 
                 game_won = True
 
+    # Check for collision with paddle
+    if game_paddle.check_collision(game_ball):
+        game_ball.change_y_dir()
 
 def display(): 
     global bricks
@@ -132,7 +132,7 @@ def game_loop():
             if game_won or game_lost: 
                 reset_game()
         elif event.type == pygame.MOUSEMOTION:
-            paddle.set_pos(game_paddle, event.pos[0], viewport)
+            game_paddle.set_pos(event.pos[0], viewport)
         
     update() 
     display() 
