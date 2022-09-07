@@ -8,5 +8,6 @@ class paddle:
         self.height = 10
         self.length = 50
 
-    def set_pos(self, x):
-        self.pos.x = x - self.length/2
+    def set_pos(self, pos_x, vp):
+        if pos_x < vp[0] - self.length/2 and pos_x > self.length/2:
+            self.pos.x = pos_x - self.length/2

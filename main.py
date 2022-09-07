@@ -132,7 +132,7 @@ def game_loop():
             if game_won or game_lost: 
                 reset_game()
         elif event.type == pygame.MOUSEMOTION:
-            paddle.set_pos(game_paddle, event.pos[0])
+            paddle.set_pos(game_paddle, event.pos[0], viewport)
         
     update() 
     display() 
