@@ -111,8 +111,8 @@ def display():
         glPopMatrix()
 
         glPushMatrix()
-        glTranslate(game_ball.pos.x, game_ball.pos.y, 0)
-        draw_ball(game_ball)
+        glTranslate(game_ball.pos.x, game_ball.pos.y, 0) # if we add +100 to game_ball.pos.x the paddle bounce works,
+        draw_ball(game_ball)                             # but we can't do that, how to fix it?
         glPopMatrix()    
 
     # Signifies done drawing and screen can now display
