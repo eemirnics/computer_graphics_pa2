@@ -61,7 +61,8 @@ def draw_check(vp):
     width = 10
 
     glPushMatrix()
-    glTranslate(vp[0]/2, vp[1]/2, 0)
+    glTranslate(vp[0]/2 + 20, vp[1]/2, 0)
+    glRotate(-45, 0, 0, 1)
     glBegin(GL_TRIANGLE_STRIP)
     glColor(0, 0.9, 0.1)
     glVertex2f(-width, height)
@@ -72,10 +73,10 @@ def draw_check(vp):
 
     glBegin(GL_TRIANGLE_STRIP)
     glColor(0, 0.9, 0.1)
-    glVertex2f(-width, width - height)
-    glVertex2f(-width, -width - height)
-    glVertex2f(height, width - height)
-    glVertex2f(height, -width - height)
+    glVertex2f(width, width - height)
+    glVertex2f(width, -width - height)
+    glVertex2f(-height, width - height)
+    glVertex2f(-height, -width - height)
     glEnd()
 
     glPopMatrix()
