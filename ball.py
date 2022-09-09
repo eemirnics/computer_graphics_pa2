@@ -5,7 +5,6 @@ class ball:
         self.radius = radius
         self.motion = motion
         self.color = [0.4, 0.3, 0.8]
-        self.collision = False
 
     def check_change_dir(self, viewport):
         if self.pos.x <= self.radius or self.pos.x >= viewport[0] - self.radius:
@@ -18,3 +17,4 @@ class ball:
 
     def change_x_dir(self):
         self.motion.x = -self.motion.x
+

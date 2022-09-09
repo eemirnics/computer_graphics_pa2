@@ -5,15 +5,14 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from paddle import *
 
-from vector import *
-from point import *
+from point_and_vector import *
 from draw_helper import *
 from ball import *
 
 viewport = [800, 800]
 
 position = point(350, 350)
-motion = vector(50, -60)
+motion = Vector(50, -60)
 game_ball = ball(position, 15, motion)
 
 game_paddle = paddle(point(int(viewport[0]/2), 50))
@@ -41,7 +40,6 @@ def init_game():
     bricks = create_bricks()
     
 
-# TODO: Some kind of note about needing to make this recursive
 def update():
     global game_ball
     global delta_time
@@ -66,8 +64,9 @@ def update():
                 game_won = True
 
     # Check for collision with paddle
-    if game_paddle.check_collision(game_ball):
-        game_ball.change_y_dir()
+    collision = game_paddle.check_collision(game_ball.pos, game_ball.motion, delta_time)
+    if collision is not None:
+        game_ball.motion = collision
 
 def display(): 
     global bricks
@@ -111,8 +110,8 @@ def display():
         glPopMatrix()
 
         glPushMatrix()
-        glTranslate(game_ball.pos.x, game_ball.pos.y, 0) # if we add +100 to game_ball.pos.x the paddle bounce works,
-        draw_ball(game_ball)                             # but we can't do that, how to fix it?
+        glTranslate(game_ball.pos.x, game_ball.pos.y, 0) 
+        draw_ball(game_ball)                        
         glPopMatrix()    
 
     # Signifies done drawing and screen can now display
@@ -146,7 +145,7 @@ def reset_game():
     global game_lost
 
     bricks = create_bricks()
-    game_ball = ball(point(350, 350), 15, vector(50, -60))
+    game_ball = ball(point(350, 350), 15, Vector(50, -60))
     game_won = False
     game_lost = False
 
