@@ -98,9 +98,9 @@ def display():
         if game_won:
             # Draw the message "You win!"
             pass
-        elif game_lost: 
+        elif game_lost:
             # Draw the message "You lose!"
-            pass
+            draw_x(viewport)
     else: 
         # Draw game objects
         draw_bricks(bricks)

@@ -30,6 +30,31 @@ def draw_paddle(paddle):
     glVertex2f(0, paddle.height)
     glEnd()
 
+# Draw x
+def draw_x(vp):
+    height = 60
+    width = 10
+
+    glPushMatrix()
+    glTranslate(vp[0]/2, vp[1]/2, 0)
+    glRotate(45, 0, 0, 1)
+    glBegin(GL_TRIANGLE_STRIP)
+    glColor(0.9, 0.1, 0)
+    glVertex2f(-width, height)
+    glVertex2f(width, height)
+    glVertex2f(-width,-height)
+    glVertex2f(width, -height)
+    glEnd()
+
+    glBegin(GL_TRIANGLE_STRIP)
+    glColor(0.9, 0.1, 0)
+    glVertex2f(-height, width)
+    glVertex2f(height, width)
+    glVertex2f(-height, -width)
+    glVertex2f(height, -width)
+    glEnd()
+
+    glPopMatrix()
 
 # Draw a single brick
 def draw_brick(b):
