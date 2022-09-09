@@ -56,6 +56,30 @@ def draw_x(vp):
 
     glPopMatrix()
 
+def draw_check(vp):
+    height = 60
+    width = 10
+
+    glPushMatrix()
+    glTranslate(vp[0]/2, vp[1]/2, 0)
+    glBegin(GL_TRIANGLE_STRIP)
+    glColor(0, 0.9, 0.1)
+    glVertex2f(-width, height)
+    glVertex2f(width, height)
+    glVertex2f(-width,-height)
+    glVertex2f(width, -height)
+    glEnd()
+
+    glBegin(GL_TRIANGLE_STRIP)
+    glColor(0, 0.9, 0.1)
+    glVertex2f(-width, width - height)
+    glVertex2f(-width, -width - height)
+    glVertex2f(height, width - height)
+    glVertex2f(height, -width - height)
+    glEnd()
+
+    glPopMatrix()
+
 # Draw a single brick
 def draw_brick(b):
     glBegin(GL_QUADS)
