@@ -81,6 +81,31 @@ def draw_check(vp):
 
     glPopMatrix()
 
+def draw_click(vp):
+    x = 50
+
+    glPushMatrix()
+    glTranslate(vp[0]/2, vp[1]/2 - 200, 0)
+    glRotate(45, 0, 0, 1)
+    glBegin(GL_TRIANGLE_STRIP)
+    glColor(0.1, 0, 0.9)
+    glVertex2f(-x, 0)
+    glVertex2f(0, x*2)
+    glVertex2f(x,0)
+    glEnd()
+
+    y = 80
+    x1 = 10
+
+    glBegin(GL_TRIANGLE_STRIP)
+    glVertex2f(-x1, 0)
+    glVertex2f(x1, 0)
+    glVertex2f(-x1, -y)
+    glVertex2f(x1, -y)
+    glEnd()
+
+    glPopMatrix()
+
 # Draw a single brick
 def draw_brick(b):
     glBegin(GL_QUADS)
