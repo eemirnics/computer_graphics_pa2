@@ -92,7 +92,8 @@ def display():
         
         if game_won:
             # Draw the message "You win!"
-            pass
+            draw_check(viewport)
+            draw_click(viewport)
         elif game_lost:
             # Draw the message "You lose!"
             draw_lose(viewport)
