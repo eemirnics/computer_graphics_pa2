@@ -88,18 +88,14 @@ def display():
 
     # If game over, stop drawing and handle the display messages for game state
     if game_won or game_lost:
-        # font = pygame.font.SysFont(None, 48)
-        # font1 = pygame.font.SysFont('chalkduster.ttf', 72)
-        # img1 = font1.render('chalkduster.ttf', True, pygame.Color(0, 0, 0))
-        # screen.blit(img1, (20, 20))
-        # TODO: Figure out how to draw text
-        pass
+        # Figure out something to display
+        
         if game_won:
             # Draw the message "You win!"
             pass
         elif game_lost:
             # Draw the message "You lose!"
-            draw_x(viewport)
+            draw_lose(viewport)
     else: 
         # Draw game objects
         draw_bricks(bricks)

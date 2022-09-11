@@ -6,8 +6,8 @@ class paddle:
         self.pos = pos
         self.color = [0.7, 0.3, 0.9]
         self.height = 10
-        self.length = 200
-        self.normal = Vector(0, self.length)
+        self.length = 100
+        self.normal = Vector(0, -self.length)
 
 
     def set_pos(self, pos_x, vp):

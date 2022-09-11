@@ -30,8 +30,8 @@ def draw_paddle(paddle):
     glVertex2f(0, paddle.height)
     glEnd()
 
-# Draw x
-def draw_x(vp):
+# Draw lose
+def draw_lose(vp):
     height = 60
     width = 10
 
