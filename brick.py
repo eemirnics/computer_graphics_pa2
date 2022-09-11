@@ -1,27 +1,10 @@
+from point_and_vector import *
 
 class brick:
 
     def __init__(self, x, y, color):
-        self.x = x
-        self.y = y
+        self.pos = point(x, y + 600)
         self.color = color
         self.collision = False
-
-    def check_collision(self, position):
-        if position.x >= self.x and position.x < self.x + 50 and position.y >= self.y + 600 and position.y < self.y + 625:
-            self.collision = True
-        return self.collision
-
-
-    # def find_normal(self, position): 
-    #     if position.x >= 0:
-    #         normal = Vector()
-    #     elif 
-
-    #     elif 
-
-    #     else:
-
-
-    # def calculate_thit(self, position):
-    #     normal = find_normal(position)
+        self.width = 50
+        self.height = 25

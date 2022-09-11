@@ -7,13 +7,12 @@ from paddle import *
 
 from point_and_vector import *
 from draw_helper import *
+from collision_helper import *
 from ball import *
 
 viewport = [800, 800]
 
-position = point(350, 350)
-motion = Vector(50, -60)
-game_ball = ball(position, 15, motion)
+game_ball = ball()
 
 game_paddle = paddle(point(int(viewport[0]/2), 50))
 game_paddle.pos.x = game_paddle.pos.x - game_paddle.length/2
@@ -21,8 +20,9 @@ game_paddle.pos.x = game_paddle.pos.x - game_paddle.length/2
 clock = None
 delta_time = 0
 bricks = []
-game_won = True
+game_won = False
 game_lost = False
+start_of_game = True
 screen = []
 
 
@@ -34,7 +34,7 @@ def init_game():
 
     pygame.display.init() 
     pygame.display.set_mode((viewport[0], viewport[1]), DOUBLEBUF|OPENGL)  
-    glClearColor(0.95, 0.85, 0.97, 1.0)
+    glClearColor(0.0, 0.0, 0.0, 1.0)
     clock.tick()
 
     bricks = create_bricks()
@@ -42,6 +42,7 @@ def init_game():
 
 def update():
     global game_ball
+    global game_paddle
     global delta_time
     global bricks
     global game_won
@@ -49,30 +50,39 @@ def update():
 
     delta_time = clock.tick() / 1000
 
-    # Reverse direction if the ball reaches an edge
-    game_ball.check_change_dir(viewport)
-    # TODO: Add condition lose condition
-
-    # Update position
-    game_ball.pos += game_ball.motion * (delta_time * 3.0)
-
+    # Check for collision with walls
+    wall_collision = check_wall_collision(game_ball, delta_time)
+    if wall_collision is not None:
+        # Check for bottom wall
+        if wall_collision.x is None:
+            game_lost = True
+        else: 
+            game_ball.motion = wall_collision
+    
     # Check for collision with bricks
     for b in bricks: 
-        if b.check_collision(game_ball.pos):
+        brick_collision = check_brick_collision(game_ball, delta_time, b)
+        if brick_collision is not None:
+            game_ball.motion = brick_collision
             bricks.remove(b)
             if len(bricks) == 0: 
                 game_won = True
 
     # Check for collision with paddle
-    collision = game_paddle.check_collision(game_ball.pos, game_ball.motion, delta_time)
-    if collision is not None:
-        game_ball.motion = collision
+    paddle_collision = check_paddle_collision(game_ball, delta_time, game_paddle)
+    if paddle_collision is not None:
+        game_ball.motion = paddle_collision
 
+    # Update position
+    game_ball.pos += game_ball.motion * delta_time
+
+    
 def display(): 
     global bricks
     global game_ball
     global game_won
     global game_lost
+    global start_of_game
     global screen
 
     # Initialize matrix
@@ -87,13 +97,12 @@ def display():
     glClear(GL_COLOR_BUFFER_BIT) 
 
     # If game over, stop drawing and handle the display messages for game state
-    if game_won or game_lost:
+    if game_won or game_lost or start_of_game:
         # Figure out something to display
-        
+        draw_click(viewport)
         if game_won:
             # Draw the message "You win!"
-            draw_check(viewport)
-            draw_click(viewport)
+            draw_win(viewport)
         elif game_lost:
             # Draw the message "You lose!"
             draw_lose(viewport)
@@ -125,7 +134,7 @@ def game_loop():
                 pygame.quit()
                 quit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if game_won or game_lost: 
+            if game_won or game_lost or start_of_game: 
                 reset_game()
         elif event.type == pygame.MOUSEMOTION:
             game_paddle.set_pos(event.pos[0], viewport)
@@ -140,11 +149,13 @@ def reset_game():
     global game_ball
     global game_won
     global game_lost
+    global start_of_game
 
     bricks = create_bricks()
-    game_ball = ball(point(350, 350), 15, Vector(50, -60))
+    game_ball = ball()
     game_won = False
     game_lost = False
+    start_of_game = False
 
 
 if __name__ == "__main__": 

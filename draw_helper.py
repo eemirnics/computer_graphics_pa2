@@ -30,6 +30,7 @@ def draw_paddle(paddle):
     glVertex2f(0, paddle.height)
     glEnd()
 
+
 # Draw lose
 def draw_lose(vp):
     height = 60
@@ -56,7 +57,9 @@ def draw_lose(vp):
 
     glPopMatrix()
 
-def draw_check(vp):
+
+# Draw check mark for win
+def draw_win(vp):
     height = 60
     width = 10
 
@@ -81,6 +84,8 @@ def draw_check(vp):
 
     glPopMatrix()
 
+
+# Draw a mouse for click
 def draw_click(vp):
     x = 50
 
@@ -88,7 +93,7 @@ def draw_click(vp):
     glTranslate(vp[0]/2, vp[1]/2 - 200, 0)
     glRotate(45, 0, 0, 1)
     glBegin(GL_TRIANGLE_STRIP)
-    glColor(0.1, 0, 0.9)
+    glColor(1.0, 1.0, 1.0)
     glVertex2f(-x, 0)
     glVertex2f(0, x*2)
     glVertex2f(x,0)
@@ -106,14 +111,15 @@ def draw_click(vp):
 
     glPopMatrix()
 
+
 # Draw a single brick
 def draw_brick(b):
     glBegin(GL_QUADS)
     glColor3f(b.color[0], b.color[1], b.color[2])
-    glVertex2f(b.x, b.y + 600)
-    glVertex2f(b.x + 50, b.y + 600)
-    glVertex2f(b.x + 50, b.y + 625)
-    glVertex2f(b.x, b.y + 625)
+    glVertex2f(b.pos.x, b.pos.y)
+    glVertex2f(b.pos.x + 50, b.pos.y)
+    glVertex2f(b.pos.x + 50, b.pos.y + 25)
+    glVertex2f(b.pos.x, b.pos.y + 25)
     glEnd()
 
 
