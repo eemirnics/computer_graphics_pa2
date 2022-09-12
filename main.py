@@ -3,19 +3,21 @@ from pygame.locals import *
 
 from OpenGL.GL import * 
 from OpenGL.GLU import *
-from paddle import *
 
+from paddle import *
 from point_and_vector import *
 from draw_helper import *
 from collision_helper import *
 from ball import *
+from obstacle import *
+
 
 viewport = [800, 800]
 
 game_ball = ball()
-
 game_paddle = paddle(point(int(viewport[0]/2), 50))
 game_paddle.pos.x = game_paddle.pos.x - game_paddle.length/2
+game_obstacle = obstacle(340, 450, 460, 505)
 
 clock = None
 delta_time = 0
@@ -23,15 +25,13 @@ bricks = []
 game_won = False
 game_lost = False
 start_of_game = True
-screen = []
 
 
 def init_game():
     global clock
     global bricks
-    global screen
-    clock = pygame.time.Clock()
 
+    clock = pygame.time.Clock()
     pygame.display.init() 
     pygame.display.set_mode((viewport[0], viewport[1]), DOUBLEBUF|OPENGL)  
     glClearColor(0.0, 0.0, 0.0, 1.0)
@@ -43,12 +43,13 @@ def init_game():
 def update():
     global game_ball
     global game_paddle
+    global game_obstacle
     global delta_time
     global bricks
     global game_won
     global game_lost
 
-    delta_time = clock.tick() / 1000
+    delta_time = clock.tick() / 2000
 
     # Check for collision with walls
     wall_collision = check_wall_collision(game_ball, delta_time)
@@ -73,6 +74,11 @@ def update():
     if paddle_collision is not None:
         game_ball.motion = paddle_collision
 
+    # Check for collision with obstacle
+    obstacle_collision = check_obstacle_collision(game_ball, delta_time, game_obstacle)
+    if obstacle_collision is not None:
+        game_ball.motion = obstacle_collision
+
     # Update position
     game_ball.pos += game_ball.motion * delta_time
 
@@ -80,10 +86,11 @@ def update():
 def display(): 
     global bricks
     global game_ball
+    global game_paddle
+    global game_obstacle
     global game_won
     global game_lost
     global start_of_game
-    global screen
 
     # Initialize matrix
     glMatrixMode(GL_PROJECTION)
@@ -98,7 +105,7 @@ def display():
 
     # If game over, stop drawing and handle the display messages for game state
     if game_won or game_lost or start_of_game:
-        # Figure out something to display
+        # Prompt user to click to restart game
         draw_click(viewport)
         if game_won:
             # Draw the message "You win!"
@@ -109,6 +116,7 @@ def display():
     else: 
         # Draw game objects
         draw_bricks(bricks)
+        draw_obstacle(game_obstacle)
 
         glPushMatrix()
         glTranslate(game_paddle.pos.x, game_paddle.pos.y, 0)
@@ -133,9 +141,11 @@ def game_loop():
             if event.key == K_ESCAPE:
                 pygame.quit()
                 quit()
+        # Game restart
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game_won or game_lost or start_of_game: 
                 reset_game()
+        # Paddle motion
         elif event.type == pygame.MOUSEMOTION:
             game_paddle.set_pos(event.pos[0], viewport)
         

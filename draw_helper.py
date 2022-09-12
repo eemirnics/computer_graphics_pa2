@@ -137,3 +137,12 @@ def create_bricks():
 def draw_bricks(bricks): 
     for brick in bricks: 
         draw_brick(brick)
+
+
+# Draw obstacle
+def draw_obstacle(obstacle):
+    glBegin(GL_LINES)
+    glColor3f(0.8, 1.0, 0.9)
+    glVertex2f(obstacle.a.x, obstacle.a.y)
+    glVertex2f(obstacle.b.x, obstacle.b.y)
+    glEnd()
